@@ -6,30 +6,30 @@ Simple proof of concept app, below covers the roadmap for the initally planned f
 
 `ASP.NET` REST API
 
-- [] Configure project (packages, frameworks)
-- [] Initial migrations
+- [ ] Configure project (packages, frameworks)
+- [ ] Initial migrations
   - user
   - site
   - site_rule
-- [] Initial endpoints
+- [ ] Initial endpoints
   - Swagger doc
   - CRUD site_rule
   - CR site
-- [] Deployment
+- [ ] Deployment
   - AWS EC2 if its included in free tier, else heroku
-- [] Clean up sites with no rules
+- [ ] Clean up sites with no rules
   - Cron job
 
 ## Frontend
 
-- [] Configure project (packages, frameworks)
-- [] Login flow
+- [ ] Configure project (packages, frameworks)
+- [ ] Login flow
   - Login screen
   - Business logic, preference towards requiring login with Google account
-- [] Create new site rule flow
+- [ ] Create new site rule flow
   - UI/Form
   - Business logic
-- [] Edit existing site rule flow
+- [ ] Edit existing site rule flow
   - UI/Form
   - Business logic
-- [] Deployment to chrome plugin store
+- [ ] Deployment to chrome plugin store
