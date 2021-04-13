@@ -6,8 +6,8 @@ Simple proof of concept app, below covers the roadmap for the initally planned f
 
 `ASP.NET` REST API
 
-- [ ] Configure project (packages, frameworks)
-- [ ] Initial migrations
+- [ x ] Configure project (packages, frameworks)
+- [ x ] Initial migrations
   - user
   - site
   - site_rule
