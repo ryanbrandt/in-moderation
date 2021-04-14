@@ -6,15 +6,16 @@ Simple proof of concept app, below covers the roadmap for the initally planned f
 
 `ASP.NET` REST API
 
-- [ x ] Configure project (packages, frameworks)
-- [ x ] Initial migrations
-  - user
-  - site
-  - site_rule
+- [x] Configure project (packages, frameworks)
+- [x] Initial migrations
+  - [x] user
+  - [x] site
+  - [x] site_rule
 - [ ] Initial endpoints
-  - Swagger doc
-  - CRUD site_rule
-  - CR site
+  - [x] Swagger doc
+  - [ ] CRUD site_rule
+  - [ ] C site
+  - [ ] C user
 - [ ] Deployment
   - AWS EC2 if its included in free tier, else heroku
 - [ ] Clean up sites with no rules
