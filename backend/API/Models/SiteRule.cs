@@ -5,11 +5,11 @@ namespace InModeration.Backend.API.Models
 {
     public class SiteRule
     {
-        public int UserId { get; private set;  }
+        public int UserId { get; set;  }
 
         public User User { get; private set; }
 
-        public int SiteId { get; private set; }
+        public int SiteId { get; set; }
 
         public Site Site { get; private set; }
 

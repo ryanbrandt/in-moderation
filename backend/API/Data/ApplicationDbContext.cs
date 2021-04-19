@@ -8,7 +8,7 @@ namespace InModeration.Backend.API.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        private const string DEFAULT_DATETIME_SQL = "GETDATE()";
+        private const string DEFAULT_DATETIME_SQL = "DATE()";
 
         public DbSet<User> Users { get; set; }
 
@@ -17,7 +17,7 @@ namespace InModeration.Backend.API.Data
         public DbSet<SiteRule> SiteRules { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite(@"Data Source=C:\users\ryanb\code\app.db");
+            => options.UseSqlite(@"Data Source=app.db");
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

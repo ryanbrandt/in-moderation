@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace InModeration.Backend.API.Data.Migrations
+namespace InModeration.Backend.API.Migrations
 {
     public partial class InitialCreate : Migration
     {
@@ -14,7 +14,7 @@ namespace InModeration.Backend.API.Data.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Domain = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
-                    Created = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValueSql: "GETDATE()")
+                    Created = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValueSql: "DATE()")
                 },
                 constraints: table =>
                 {
@@ -28,8 +28,8 @@ namespace InModeration.Backend.API.Data.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Email = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
-                    Created = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValueSql: "GETDATE()"),
-                    Modified = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValueSql: "GETDATE()")
+                    Created = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValueSql: "DATE()"),
+                    Modified = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValueSql: "DATE()")
                 },
                 constraints: table =>
                 {
@@ -44,8 +44,8 @@ namespace InModeration.Backend.API.Data.Migrations
                     SiteId = table.Column<int>(type: "INTEGER", nullable: false),
                     Time = table.Column<int>(type: "INTEGER", nullable: false),
                     Points = table.Column<int>(type: "INTEGER", nullable: false),
-                    Created = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValueSql: "GETDATE()"),
-                    Modified = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValueSql: "GETDATE()")
+                    Created = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValueSql: "DATE()"),
+                    Modified = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValueSql: "DATE()")
                 },
                 constraints: table =>
                 {

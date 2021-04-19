@@ -2,6 +2,9 @@
 .vs/
 .vscode/
 
+# local db
+*.db
+
 *.sw*
 *.orig
 **/tags

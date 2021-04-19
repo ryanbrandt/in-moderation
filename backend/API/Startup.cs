@@ -1,40 +1,68 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
+
+using InModeration.Backend.API.Models;
 
 namespace InModeration.Backend.API
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddApiVersioning(
+                config =>
+                {
+                    config.DefaultApiVersion = new ApiVersion(1, 0);
+                    config.AssumeDefaultVersionWhenUnspecified = true;
+                }
+           );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            app.UseExceptionHandler(
+                errorApp =>
+                {
+                    errorApp.Run(
+                        async context =>
+                        {
+                            var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
+                            var exception = exceptionHandlerPathFeature.Error;
+
+                            logger.LogError(exception.ToString());
+
+                            var message = "Server error";
+                            var code = 500;
+                            if (exception is HttpException httpException)
+                            {
+                                code = (int)httpException.Code;
+                                message = httpException.Message ?? message;
+                            }
+
+                            context.Response.StatusCode = code;
+                            await context.Response.BodyWriter.WriteAsync(Encoding.UTF8.GetBytes(message));
+
+                        }
+                    );
+                }
+            );
 
             app.UseHttpsRedirection();
 
