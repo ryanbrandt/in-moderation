@@ -8,7 +8,7 @@ namespace InModeration.Backend.API.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        private const string DEFAULT_DATETIME_SQL = "DATE()";
+        private const string DEFAULT_DATETIME_SQL = "DATETIME('now')";
 
         public DbSet<User> Users { get; set; }
 

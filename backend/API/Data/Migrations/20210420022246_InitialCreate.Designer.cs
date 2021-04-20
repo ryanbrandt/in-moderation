@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InModeration.Backend.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210419010808_InitialCreate")]
+    [Migration("20210420022246_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,7 +27,7 @@ namespace InModeration.Backend.API.Migrations
                     b.Property<DateTime>("Created")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("DATE()");
+                        .HasDefaultValueSql("DATETIME('now')");
 
                     b.Property<string>("Domain")
                         .IsRequired()
@@ -53,12 +53,12 @@ namespace InModeration.Backend.API.Migrations
                     b.Property<DateTime>("Created")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("DATE()");
+                        .HasDefaultValueSql("DATETIME('now')");
 
                     b.Property<DateTime>("Modified")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("DATE()");
+                        .HasDefaultValueSql("DATETIME('now')");
 
                     b.Property<int>("Points")
                         .HasColumnType("INTEGER");
@@ -82,7 +82,7 @@ namespace InModeration.Backend.API.Migrations
                     b.Property<DateTime>("Created")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("DATE()");
+                        .HasDefaultValueSql("DATETIME('now')");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -92,7 +92,7 @@ namespace InModeration.Backend.API.Migrations
                     b.Property<DateTime>("Modified")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("DATE()");
+                        .HasDefaultValueSql("DATETIME('now')");
 
                     b.HasKey("Id");
 

@@ -11,11 +11,11 @@ Simple proof of concept app, below covers the roadmap for the initally planned f
   - [x] user
   - [x] site
   - [x] site_rule
-- [ ] Initial endpoints
+- [x] Initial endpoints
   - [x] Swagger doc
-  - [ ] CRUD site_rule
-  - [ ] C site
-  - [ ] C user
+  - [x] CRUD site_rule
+  - [x] CR site
+  - [x] C user
 - [ ] Deployment
   - AWS EC2 if its included in free tier, else heroku
 - [ ] Clean up sites with no rules

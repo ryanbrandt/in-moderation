@@ -19,6 +19,5 @@
   <ItemGroup>
     <Folder Include="Constants\" />
     <Folder Include="Data\Extensions\" />
-    <Folder Include="Data\Migrations\" />
   </ItemGroup>
 </Project>

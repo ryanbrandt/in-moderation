@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc;
 
 using InModeration.Backend.API.Data;
 using InModeration.Backend.API.Constants;
 using InModeration.Backend.API.Models;
+using InModeration.Backend.API.Data.Extensions;
 
 namespace InModeration.Backend.API.Controllers
 {
@@ -34,8 +32,7 @@ namespace InModeration.Backend.API.Controllers
 
             _db.SaveChanges();
 
-            return Created("", new { user.Id });
+            return Created("", user);
         }
-
     }
 }

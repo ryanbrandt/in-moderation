@@ -28,7 +28,7 @@ namespace InModeration.Backend.API.Controllers
             _logger = logger;
         }
 
-        private SiteRule RetrieveByUserAndSiteId(int? userId, int? siteId)
+        private SiteRule FindRule(int userId, int siteId)
         {
             var rule = _db
                           .SiteRules
@@ -51,29 +51,23 @@ namespace InModeration.Backend.API.Controllers
 
             _db.SaveChanges();
 
-            return Created("", new { rule.UserId, rule.SiteId });
+            var associatedSite = _db
+                                    .Sites
+                                    .SingleOrDefault(site => site.Id == rule.SiteId);
+            rule.Site = associatedSite;
+           
+            return CreatedAtAction("Get", new { rule.UserId, rule.SiteId }, new SiteRulePayload(rule));
         }
 
         [HttpGet("user/{userId}")]
-        public IEnumerable<dynamic> Get(int userId, [FromQuery] int? siteId)
+        public IEnumerable<SiteRulePayload> Get(int userId, [FromQuery] int? siteId)
         {
             var rules = _db
                           .SiteRules
                           .Where(siteRule => siteRule.UserId == userId)
                           .WhereIf((siteId != null), siteRule => siteRule.SiteId == siteId)
                           .Include("Site")
-                          .Select(
-                            siteRule => new
-                            {
-                                siteRule.UserId,
-                                siteRule.SiteId,
-                                siteRule.Time,
-                                siteRule.Points,
-                                siteRule.Site.Domain,
-                                siteRule.Created,
-                                siteRule.Modified
-                            }
-                          );
+                          .Select(siteRule => new SiteRulePayload(siteRule));
 
             return rules;
         }
@@ -81,7 +75,7 @@ namespace InModeration.Backend.API.Controllers
         [HttpPut(SINGLE_RESOURCE_PATH)]
         public IActionResult Put(int userId, int siteId, [FromBody] SiteRule updatedRule)
         {
-            var rule = RetrieveByUserAndSiteId(userId, siteId);
+            var rule = FindRule(userId, siteId);
 
             _db
                 .Entry(rule)
@@ -96,7 +90,7 @@ namespace InModeration.Backend.API.Controllers
         [HttpDelete(SINGLE_RESOURCE_PATH)]
         public IActionResult Delete(int userId, int siteId)
         {
-            var rule = RetrieveByUserAndSiteId(userId, siteId);
+            var rule = FindRule(userId, siteId);
                        
             _db
                 .SiteRules

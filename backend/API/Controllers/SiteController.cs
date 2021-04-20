@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc;
 
 using InModeration.Backend.API.Data;
 using InModeration.Backend.API.Constants;
 using InModeration.Backend.API.Models;
+using InModeration.Backend.API.Data.Extensions;
 
 namespace InModeration.Backend.API.Controllers
 {
@@ -34,7 +32,18 @@ namespace InModeration.Backend.API.Controllers
 
             _db.SaveChanges();
 
-            return Created("", new { site.Id });
+            return CreatedAtAction("Get", new { site.Id }, site);
+        }
+
+        [HttpGet]
+        public IEnumerable<Site> Get([FromQuery] int? id, [FromQuery] string? domain)
+        {
+            var sites = _db
+                            .Sites
+                            .WhereIf((id != null), site => site.Id == id)
+                            .WhereIf((domain != null), site => site.Domain.Contains(domain));
+
+            return sites;
         }
         
     }

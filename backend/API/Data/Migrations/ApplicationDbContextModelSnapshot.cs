@@ -25,7 +25,7 @@ namespace InModeration.Backend.API.Migrations
                     b.Property<DateTime>("Created")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("DATE()");
+                        .HasDefaultValueSql("DATETIME('now')");
 
                     b.Property<string>("Domain")
                         .IsRequired()
@@ -51,12 +51,12 @@ namespace InModeration.Backend.API.Migrations
                     b.Property<DateTime>("Created")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("DATE()");
+                        .HasDefaultValueSql("DATETIME('now')");
 
                     b.Property<DateTime>("Modified")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("DATE()");
+                        .HasDefaultValueSql("DATETIME('now')");
 
                     b.Property<int>("Points")
                         .HasColumnType("INTEGER");
@@ -80,7 +80,7 @@ namespace InModeration.Backend.API.Migrations
                     b.Property<DateTime>("Created")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("DATE()");
+                        .HasDefaultValueSql("DATETIME('now')");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -90,7 +90,7 @@ namespace InModeration.Backend.API.Migrations
                     b.Property<DateTime>("Modified")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("DATE()");
+                        .HasDefaultValueSql("DATETIME('now')");
 
                     b.HasKey("Id");
 

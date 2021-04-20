@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime;
 using System.ComponentModel.DataAnnotations;
 
 namespace InModeration.Backend.API.Models
@@ -8,12 +9,16 @@ namespace InModeration.Backend.API.Models
         [Required(ErrorMessage = "User Id is required")]
         public int UserId { get; set;  }
 
-        public User User { get; private set; }
+# nullable enable
+        public User? User { get; set; }
+# nullable disable
 
         [Required(ErrorMessage = "Site Id is required")]
         public int SiteId { get; set; }
 
-        public Site Site { get; private set; }
+# nullable enable
+        public Site? Site { get; set; }
+# nullable disable
 
         [Required(ErrorMessage = "Time is required")]
         public int Time { get; set; }

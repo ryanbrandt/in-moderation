@@ -1,4 +1,4 @@
-swagger: '2.0'
+swagger: "2.0"
 info:
   description: In Moderation Chrome extension backend API
   version: 1.0.0
@@ -11,47 +11,47 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 
 tags:
-- name: rule
-  description: Operations on site rules
-- name: site
-  description: Operations on sites
-- name: user
-  description: Operations on users
+  - name: rule
+    description: Operations on site rules
+  - name: site
+    description: Operations on sites
+  - name: user
+    description: Operations on users
 
 paths:
   /rule/user/{userId}:
     get:
       tags:
-      - rule
+        - rule
       summary: retrieves a list of site rules
       operationId: ruleList
       description: |
         lists all site rules owned by a user matching the specified parameters
       parameters:
-      - in: path
-        name: userId
-        required: true
-        type: string
-      - in: query
-        name: siteId
-        required: false
-        type: string
+        - in: path
+          name: userId
+          required: true
+          type: string
+        - in: query
+          name: siteId
+          required: false
+          type: string
       responses:
         200:
-          description: the associated site rule data
+          description: success
           schema:
-              type: array
-              items:
-                $ref: '#/definitions/SiteRuleWithSite'
+            type: array
+            items:
+              $ref: "#/definitions/SiteRulePayload"
         400:
           description: client error
         500:
           description: server error
-          
+
   /rule:
     post:
       tags:
-      - rule
+        - rule
       summary: creates a site rule
       operationId: ruleCreate
       description: |
@@ -61,7 +61,7 @@ paths:
           name: rule
           description: The rule to create
           schema:
-            $ref: '#/definitions/SiteRule'
+            $ref: "#/definitions/SiteRule"
       responses:
         201:
           description: rule created
@@ -69,11 +69,11 @@ paths:
           description: client error
         500:
           description: server error
-          
+
   /rule/user/{userId}/site/{siteId}:
     put:
       tags:
-      - rule
+        - rule
       summary: updates a site rule
       operationId: ruleUpdate
       description: |
@@ -91,7 +91,7 @@ paths:
           name: rule
           description: The updated rule data
           schema:
-            $ref: '#/definitions/SiteRule'
+            $ref: "#/definitions/SiteRule"
       responses:
         200:
           description: rule updated
@@ -101,7 +101,7 @@ paths:
           description: server error
     delete:
       tags:
-      - rule
+        - rule
       summary: deletes a site rule
       operationId: ruleDelete
       description: |
@@ -122,11 +122,11 @@ paths:
           description: client error
         500:
           description: server error
-          
+
   /site:
     post:
       tags:
-      - site
+        - site
       summary: creates a site
       operationId: siteCreate
       description: |
@@ -136,7 +136,7 @@ paths:
           name: site
           description: The site to create
           schema:
-            $ref: '#/definitions/Site'
+            $ref: "#/definitions/Site"
       responses:
         201:
           description: site created
@@ -144,11 +144,36 @@ paths:
           description: client error
         500:
           description: server error
-          
+    get:
+      tags:
+        - site
+      summary: retrieves a list of sites
+      operationId: siteList
+      description: |
+        retrieves a list of sites matching the specified parameters
+      parameters:
+        - in: query
+          name: id
+          type: number
+          description: An optional site id
+        - in: query
+          name: domain
+          type: string
+          description: An optional domain query
+      responses:
+        200:
+          description: success
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Site"
+        500:
+          description: server error
+
   /user:
     post:
       tags:
-      - user
+        - user
       summary: creates a site
       operationId: userCreate
       description: |
@@ -158,7 +183,7 @@ paths:
           name: user
           description: The user to create
           schema:
-            $ref: '#/definitions/User'
+            $ref: "#/definitions/User"
       responses:
         201:
           description: user created
@@ -166,30 +191,28 @@ paths:
           description: client error
         500:
           description: server error
-          
-definitions:
 
-  SiteRuleWithSite:
+definitions:
+  SiteRulePayload:
     type: object
     required:
-    - rule
+      - rule
+    allOf:
+      - $ref: "#/definitions/SiteRule"
+      - type: object
     properties:
-      rule:
-        $ref: '#/definitions/SiteRule'
-      site:
-        $ref: '#/definitions/Site'
+      domain:
+        type: string
+        example: https://www.facebook.com
 
   SiteRule:
     type: object
     required:
-    - userId
-    - siteId
-    - minutes
-    - points
+      - userId
+      - siteId
+      - minutes
+      - points
     properties:
-      id:
-        type: number
-        example: 3
       userId:
         type: number
         example: 11
@@ -199,36 +222,36 @@ definitions:
       minutes:
         type: number
         example: 60
-      points: 
+      points:
         type: number
         example: 2000
       created:
         type: string
         format: date-time
-        example: '2017-07-21T17:32:28Z'
+        example: "2017-07-21T17:32:28Z"
       modified:
         type: string
         format: date-time
-        example: '2020-07-21T17:32:28Z'
-        
+        example: "2020-07-21T17:32:28Z"
+
   Site:
     required:
-    - domain
+      - domain
     properties:
       id:
         type: number
         example: 11
       domain:
         type: string
-        example: facebook.com
+        example: https://www.facebook.com
       created:
         type: string
         format: date-time
-        example: '2017-07-21T17:32:28Z'
-        
+        example: "2017-07-21T17:32:28Z"
+
   User:
     required:
-    - email
+      - email
     properties:
       id:
         type: number
@@ -239,15 +262,14 @@ definitions:
       created:
         type: string
         format: date-time
-        example: '2017-07-21T17:32:28Z'
+        example: "2017-07-21T17:32:28Z"
       modified:
         type: string
         format: date-time
-        example: '2020-07-21T17:32:28Z'
-      
-        
+        example: "2020-07-21T17:32:28Z"
+
 # Added by API Auto Mocking Plugin
 host: virtserver.swaggerhub.com
 basePath: /in-moderation/v1
 schemes:
- - https
+  - https
