@@ -1,14 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using InModeration.Backend.API.Constants;
+using InModeration.Backend.API.Models;
+using InModeration.Backend.API.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using System.Net;
 using System.Linq;
-
-using InModeration.Backend.API.Models;
-using InModeration.Backend.API.Constants;
-using InModeration.Backend.API.Data;
-using InModeration.Backend.API.Data.Extensions;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace InModeration.Backend.API.Controllers
 {
@@ -19,84 +17,67 @@ namespace InModeration.Backend.API.Controllers
     {
         private const string SINGLE_RESOURCE_PATH = "user/{userId}/site/{siteId}";
 
-        private readonly ApplicationDbContext _db = new ApplicationDbContext();
+        private readonly ISiteRuleService _siteRuleService;
+
+        private readonly ISiteService _siteService;
 
         private readonly ILogger<SiteRuleController> _logger;
 
-        public SiteRuleController(ILogger<SiteRuleController> logger)
+        public SiteRuleController(ILogger<SiteRuleController> logger, ISiteRuleService siteRuleService, ISiteService siteService)
         {
             _logger = logger;
+            _siteRuleService = siteRuleService;
+            _siteService = siteService;
         }
 
-        private SiteRule FindRule(int userId, int siteId)
+        private async Task<SiteRule> GetRuleOrThrow(int userId, int siteId)
         {
-            var rule = _db
-                          .SiteRules
-                          .SingleOrDefault(siteRule => siteRule.UserId == userId && siteRule.UserId == siteId);
+            var rule = await _siteRuleService.FindSiteRuleAsync(userId, siteId);
 
             if (rule == null)
             {
-                throw new HttpException(HttpStatusCode.NotFound, "Specified site rule not found");
+                throw new HttpException(HttpStatusCode.NotFound, "Site rule does not exist");
             }
 
             return rule;
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] SiteRule rule)
+        public async Task<IActionResult> Post([FromBody] SiteRule rule)
         {
-            _db
-                .SiteRules
-                .Add(rule);
+            await _siteRuleService.CreateSiteRuleAsync(rule);
 
-            _db.SaveChanges();
-
-            var associatedSite = _db
-                                    .Sites
-                                    .SingleOrDefault(site => site.Id == rule.SiteId);
+            var associatedSite = await _siteService.FindSiteAsync(rule.SiteId);
             rule.Site = associatedSite;
-           
+
             return CreatedAtAction("Get", new { rule.UserId, rule.SiteId }, new SiteRulePayload(rule));
         }
 
         [HttpGet("user/{userId}")]
-        public IEnumerable<SiteRulePayload> Get(int userId, [FromQuery] int? siteId)
+        public async Task<IEnumerable<SiteRulePayload>> Get(int userId, [FromQuery] int? siteId)
         {
-            var rules = _db
-                          .SiteRules
-                          .Where(siteRule => siteRule.UserId == userId)
-                          .WhereIf((siteId != null), siteRule => siteRule.SiteId == siteId)
-                          .Include("Site")
-                          .Select(siteRule => new SiteRulePayload(siteRule));
+            var rules = await _siteRuleService.ListSiteRulesAsync(userId, siteId, true);
+            var rulesPayload = rules.Select(rule => new SiteRulePayload(rule));
 
-            return rules;
+            return rulesPayload;
         }
 
         [HttpPut(SINGLE_RESOURCE_PATH)]
-        public IActionResult Put(int userId, int siteId, [FromBody] SiteRule updatedRule)
+        public async Task<IActionResult> Put(int userId, int siteId, [FromBody] SiteRule updatedRule)
         {
-            var rule = FindRule(userId, siteId);
+            var rule = await GetRuleOrThrow(userId, siteId);
 
-            _db
-                .Entry(rule)
-                .CurrentValues
-                .SetValues(updatedRule);
-
-            _db.SaveChanges();
+            await _siteRuleService.UpdateSiteRuleAsync(rule, updatedRule);
 
             return NoContent();
         }
 
         [HttpDelete(SINGLE_RESOURCE_PATH)]
-        public IActionResult Delete(int userId, int siteId)
+        public async Task<IActionResult> Delete(int userId, int siteId)
         {
-            var rule = FindRule(userId, siteId);
-                       
-            _db
-                .SiteRules
-                .Remove(rule);
+            var rule = await GetRuleOrThrow(userId, siteId);
 
-            _db.SaveChanges();
+            await _siteRuleService.DeleteSiteRuleAsync(rule);
 
             return NoContent();
         }

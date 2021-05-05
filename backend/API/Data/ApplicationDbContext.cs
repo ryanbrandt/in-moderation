@@ -1,8 +1,7 @@
-﻿using System;
+﻿using InModeration.Backend.API.Models;
 using Microsoft.EntityFrameworkCore;
-
-using InModeration.Backend.API.Models;
-
+using System;
+using System.Threading.Tasks;
 
 namespace InModeration.Backend.API.Data
 {
@@ -18,6 +17,11 @@ namespace InModeration.Backend.API.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseSqlite(@"Data Source=app.db");
+
+        internal Task SingleOrDefaultAsync()
+        {
+            throw new NotImplementedException();
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

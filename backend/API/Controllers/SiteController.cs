@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Mvc;
-
-using InModeration.Backend.API.Data;
-using InModeration.Backend.API.Constants;
+﻿using InModeration.Backend.API.Constants;
 using InModeration.Backend.API.Models;
-using InModeration.Backend.API.Data.Extensions;
+using InModeration.Backend.API.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace InModeration.Backend.API.Controllers
 {
@@ -14,37 +13,31 @@ namespace InModeration.Backend.API.Controllers
     [Route("v{version:apiVersion}/site")]
     public class SiteController : Controller
     {
-        private readonly ApplicationDbContext _db = new ApplicationDbContext();
+        private readonly ISiteService _siteService;
 
         private readonly ILogger<SiteController> _logger;
 
-        public SiteController(ILogger<SiteController> logger)
+        public SiteController(ILogger<SiteController> logger, ISiteService siteService)
         {
             _logger = logger;
+            _siteService = siteService;
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Site site)
+        public async Task<IActionResult> Post([FromBody] Site site)
         {
-            _db
-                .Sites
-                .Add(site);
-
-            _db.SaveChanges();
+            await _siteService.CreateSiteAsync(site);
 
             return CreatedAtAction("Get", new { site.Id }, site);
         }
 
         [HttpGet]
-        public IEnumerable<Site> Get([FromQuery] int? id, [FromQuery] string? domain)
+        public async Task<IEnumerable<Site>> Get([FromQuery] int? id, [FromQuery] string? domain)
         {
-            var sites = _db
-                            .Sites
-                            .WhereIf((id != null), site => site.Id == id)
-                            .WhereIf((domain != null), site => site.Domain.Contains(domain));
+            var sites = await _siteService.ListSitesAsync(id, domain);
 
             return sites;
         }
-        
+
     }
 }

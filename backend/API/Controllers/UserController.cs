@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Mvc;
-
-using InModeration.Backend.API.Data;
-using InModeration.Backend.API.Constants;
+﻿using InModeration.Backend.API.Constants;
 using InModeration.Backend.API.Models;
-using InModeration.Backend.API.Data.Extensions;
+using InModeration.Backend.API.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace InModeration.Backend.API.Controllers
 {
@@ -14,23 +12,20 @@ namespace InModeration.Backend.API.Controllers
     [Route("v{version:apiVersion}/user")]
     public class UserController : Controller
     {
-        private readonly ApplicationDbContext _db = new ApplicationDbContext();
+        private readonly IUserService _userService;
 
         private readonly ILogger<UserController> _logger;
 
-        public UserController(ILogger<UserController> logger)
+        public UserController(ILogger<UserController> logger, IUserService userService)
         {
             _logger = logger;
+            _userService = userService;
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] User user)
+        public async Task<IActionResult> Post([FromBody] User user)
         {
-            _db
-                .Users
-                .Add(user);
-
-            _db.SaveChanges();
+            await _userService.CreateUserAsync(user);
 
             return Created("", user);
         }

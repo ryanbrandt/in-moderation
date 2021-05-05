@@ -6,7 +6,7 @@ namespace InModeration.Backend.API.Models
     public class Site
     {
         [Key]
-        public int Id { get; private set;  }
+        public int Id { get; private set; }
 
         [Required(ErrorMessage = "Domain is required")]
         [MaxLength(200, ErrorMessage = "Max domain length is 200")]

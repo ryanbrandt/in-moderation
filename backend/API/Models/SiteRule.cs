@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime;
 using System.ComponentModel.DataAnnotations;
 
 namespace InModeration.Backend.API.Models
@@ -7,7 +6,7 @@ namespace InModeration.Backend.API.Models
     public class SiteRule
     {
         [Required(ErrorMessage = "User Id is required")]
-        public int UserId { get; set;  }
+        public int UserId { get; set; }
 
 # nullable enable
         public User? User { get; set; }

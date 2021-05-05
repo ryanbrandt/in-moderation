@@ -1,3 +1,4 @@
+using InModeration.Backend.API.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -7,8 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Text;
-
-using InModeration.Backend.API.Models;
 
 namespace InModeration.Backend.API
 {
