@@ -1,4 +1,7 @@
+using InModeration.Backend.API.Data;
+using InModeration.Backend.API.Data.Repositories;
 using InModeration.Backend.API.Models;
+using InModeration.Backend.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -31,6 +34,16 @@ namespace InModeration.Backend.API
                     config.AssumeDefaultVersionWhenUnspecified = true;
                 }
            );
+
+            services.AddDbContext<ApplicationDbContext>();
+
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ISiteRepository, SiteRepository>();
+            services.AddScoped<ISiteRuleRepository, SiteRuleRepository>();
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ISiteService, SiteService>();
+            services.AddScoped<ISiteRuleService, SiteRuleService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
