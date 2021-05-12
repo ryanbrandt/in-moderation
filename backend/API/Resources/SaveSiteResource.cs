@@ -1,18 +1,15 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace InModeration.Backend.API.Models
+namespace InModeration.Backend.API.Resources
 {
-    public class Site
+    public class SaveSiteResource
     {
-        [Key]
-        public int Id { get; set; }
+        [Required(ErrorMessage = "Id is required")]
+        public int Id { get; private set; }
 
         [Required(ErrorMessage = "Domain is required")]
         [MaxLength(200, ErrorMessage = "Max domain length is 200")]
         [Url(ErrorMessage = "Domain must be a URL")]
         public string Domain { get; set; }
-
-        public DateTime Created { get; set; }
     }
 }

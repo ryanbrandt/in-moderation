@@ -13,8 +13,6 @@ namespace InModeration.Backend.API.Data.Repositories
             await _db
                 .Users
                 .AddAsync(user);
-
-            await _db.SaveChangesAsync();
         }
     }
 }

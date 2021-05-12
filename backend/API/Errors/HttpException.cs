@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace InModeration.Backend.API.Models
+namespace InModeration.Backend.API.Errors
 {
     public class HttpException : Exception
     {

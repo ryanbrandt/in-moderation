@@ -1,9 +1,14 @@
-﻿using InModeration.Backend.API.Constants;
+﻿using AutoMapper;
+using InModeration.Backend.API.Constants;
+using InModeration.Backend.API.Errors;
 using InModeration.Backend.API.Models;
+using InModeration.Backend.API.Models.Extensions;
+using InModeration.Backend.API.Resources;
 using InModeration.Backend.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace InModeration.Backend.API.Controllers
@@ -17,15 +22,24 @@ namespace InModeration.Backend.API.Controllers
 
         private readonly ILogger<SiteController> _logger;
 
-        public SiteController(ILogger<SiteController> logger, ISiteService siteService)
+        private readonly IMapper _mapper;
+
+        public SiteController(ILogger<SiteController> logger, ISiteService siteService, IMapper mapper)
         {
             _logger = logger;
             _siteService = siteService;
+            _mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Site site)
+        public async Task<IActionResult> Post([FromBody] SaveSiteResource resource)
         {
+            if (!ModelState.IsValid)
+            {
+                throw new HttpException(HttpStatusCode.BadRequest, ModelState.GetErrors());
+            }
+
+            var site = _mapper.Map<SaveSiteResource, Site>(resource);
             await _siteService.CreateSiteAsync(site);
 
             return CreatedAtAction("Get", new { site.Id }, site);

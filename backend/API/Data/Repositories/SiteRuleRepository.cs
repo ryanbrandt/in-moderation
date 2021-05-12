@@ -26,8 +26,6 @@ namespace InModeration.Backend.API.Data.Repositories
             await _db
                 .SiteRules
                 .AddAsync(rule);
-
-            await _db.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<SiteRule>> ListAsync(int userId, int? siteId, bool includeSite = false)
@@ -48,8 +46,6 @@ namespace InModeration.Backend.API.Data.Repositories
                 .Entry(updatedRule)
                 .CurrentValues
                 .SetValues(updatedRule);
-
-            await _db.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(SiteRule rule)
@@ -57,8 +53,6 @@ namespace InModeration.Backend.API.Data.Repositories
             _db
                 .SiteRules
                 .Remove(rule);
-
-            await _db.SaveChangesAsync();
         }
     }
 }

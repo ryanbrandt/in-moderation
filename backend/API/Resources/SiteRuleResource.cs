@@ -1,8 +1,9 @@
-﻿using System;
+﻿using InModeration.Backend.API.Models;
+using System;
 
-namespace InModeration.Backend.API.Models
+namespace InModeration.Backend.API.Resources
 {
-    public class SiteRulePayload
+    public class SiteRuleResource
     {
         public int UserId { get; set; }
 
@@ -18,7 +19,7 @@ namespace InModeration.Backend.API.Models
 
         public DateTime Modified { get; set; }
 
-        public SiteRulePayload(SiteRule rule)
+        public SiteRuleResource(SiteRule rule)
         {
             UserId = rule.UserId;
             SiteId = rule.SiteId;

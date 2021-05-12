@@ -1,6 +1,6 @@
 using InModeration.Backend.API.Data;
 using InModeration.Backend.API.Data.Repositories;
-using InModeration.Backend.API.Models;
+using InModeration.Backend.API.Errors;
 using InModeration.Backend.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -37,6 +37,8 @@ namespace InModeration.Backend.API
 
             services.AddDbContext<ApplicationDbContext>();
 
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ISiteRepository, SiteRepository>();
             services.AddScoped<ISiteRuleRepository, SiteRuleRepository>();
@@ -44,6 +46,8 @@ namespace InModeration.Backend.API
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ISiteService, SiteService>();
             services.AddScoped<ISiteRuleService, SiteRuleService>();
+
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

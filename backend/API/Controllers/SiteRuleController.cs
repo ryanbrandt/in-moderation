@@ -1,5 +1,9 @@
-﻿using InModeration.Backend.API.Constants;
+﻿using AutoMapper;
+using InModeration.Backend.API.Constants;
+using InModeration.Backend.API.Errors;
 using InModeration.Backend.API.Models;
+using InModeration.Backend.API.Models.Extensions;
+using InModeration.Backend.API.Resources;
 using InModeration.Backend.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -23,14 +27,17 @@ namespace InModeration.Backend.API.Controllers
 
         private readonly ILogger<SiteRuleController> _logger;
 
-        public SiteRuleController(ILogger<SiteRuleController> logger, ISiteRuleService siteRuleService, ISiteService siteService)
+        private readonly IMapper _mapper;
+
+        public SiteRuleController(ILogger<SiteRuleController> logger, ISiteRuleService siteRuleService, ISiteService siteService, IMapper mapper)
         {
             _logger = logger;
             _siteRuleService = siteRuleService;
             _siteService = siteService;
+            _mapper = mapper;
         }
 
-        private async Task<SiteRule> GetRuleOrThrow(int userId, int siteId)
+        private async Task<SiteRule> FindOrThrowAsync(int userId, int siteId)
         {
             var rule = await _siteRuleService.FindSiteRuleAsync(userId, siteId);
 
@@ -45,19 +52,24 @@ namespace InModeration.Backend.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] SiteRule rule)
         {
+            if (!ModelState.IsValid)
+            {
+                throw new HttpException(HttpStatusCode.BadRequest, ModelState.GetErrors());
+            }
+
             await _siteRuleService.CreateSiteRuleAsync(rule);
 
             var associatedSite = await _siteService.FindSiteAsync(rule.SiteId);
             rule.Site = associatedSite;
 
-            return CreatedAtAction("Get", new { rule.UserId, rule.SiteId }, new SiteRulePayload(rule));
+            return CreatedAtAction("Get", new { rule.UserId, rule.SiteId }, new SiteRuleResource(rule));
         }
 
         [HttpGet("user/{userId}")]
-        public async Task<IEnumerable<SiteRulePayload>> Get(int userId, [FromQuery] int? siteId)
+        public async Task<IEnumerable<SiteRuleResource>> Get(int userId, [FromQuery] int? siteId)
         {
             var rules = await _siteRuleService.ListSiteRulesAsync(userId, siteId, true);
-            var rulesPayload = rules.Select(rule => new SiteRulePayload(rule));
+            var rulesPayload = rules.Select(rule => new SiteRuleResource(rule));
 
             return rulesPayload;
         }
@@ -65,7 +77,7 @@ namespace InModeration.Backend.API.Controllers
         [HttpPut(SINGLE_RESOURCE_PATH)]
         public async Task<IActionResult> Put(int userId, int siteId, [FromBody] SiteRule updatedRule)
         {
-            var rule = await GetRuleOrThrow(userId, siteId);
+            var rule = await FindOrThrowAsync(userId, siteId);
 
             await _siteRuleService.UpdateSiteRuleAsync(rule, updatedRule);
 
@@ -75,7 +87,7 @@ namespace InModeration.Backend.API.Controllers
         [HttpDelete(SINGLE_RESOURCE_PATH)]
         public async Task<IActionResult> Delete(int userId, int siteId)
         {
-            var rule = await GetRuleOrThrow(userId, siteId);
+            var rule = await FindOrThrowAsync(userId, siteId);
 
             await _siteRuleService.DeleteSiteRuleAsync(rule);
 

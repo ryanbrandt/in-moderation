@@ -23,8 +23,6 @@ namespace InModeration.Backend.API.Data.Repositories
             await _db
                  .Sites
                  .AddAsync(site);
-
-            await _db.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Site>> ListAsync(int? id, string? domain)
