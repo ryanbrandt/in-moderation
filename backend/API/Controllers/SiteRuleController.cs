@@ -29,7 +29,7 @@ namespace InModeration.Backend.API.Controllers
 
         private readonly IMapper _mapper;
 
-        public SiteRuleController(ILogger<SiteRuleController> logger, ISiteRuleService siteRuleService, ISiteService siteService, IMapper mapper)
+        public SiteRuleController(ILogger<SiteRuleController> logger, IMapper mapper, ISiteRuleService siteRuleService, ISiteService siteService)
         {
             _logger = logger;
             _siteRuleService = siteRuleService;

@@ -24,7 +24,7 @@ namespace InModeration.Backend.API.Controllers
 
         private readonly IMapper _mapper;
 
-        public SiteController(ILogger<SiteController> logger, ISiteService siteService, IMapper mapper)
+        public SiteController(ILogger<SiteController> logger, IMapper mapper, ISiteService siteService)
         {
             _logger = logger;
             _siteService = siteService;
