@@ -121,3 +121,6 @@ UpgradeLog*.XML
 
 # NuGet
 packages/
+
+# Docker
+compose/
