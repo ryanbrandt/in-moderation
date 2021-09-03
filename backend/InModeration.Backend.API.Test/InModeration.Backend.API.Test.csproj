@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\API\InModeration.Backend.API.csproj" />
+    <ProjectReference Include="..\InModeration.Backend.API\InModeration.Backend.API.csproj" />
   </ItemGroup>
 
 </Project>
